@@ -1,6 +1,6 @@
 <template>
   <div class="calculator">
-    <Display value="1000" />
+    <Display :value="displayValue" />
     <Button label="AC" triple @onClick="clearMemory" />
     <Button label="/" operation @onClick="setOperation" />
     <Button label="7" @onClick="addDigit" />
@@ -26,16 +26,49 @@ import Display from "../components/Display"
 import Button from "../components/Button"
 
 export default {
+  data: function () {
+    return {
+      displayValue: "0",
+      clearDisplay: false,
+      operation: null,
+      values: [0, 0],
+      current: 0
+    }
+  },
   components: { Button, Display },
   methods: {
     clearMemory() {
-
+      // Volta ao estado original de data
+      Object.assign(this.$data, this.$options.data())
     },
     setOperation(operation) {
+      if (this.current === 0) {
+        this.operation = operation
+        this.current = 1
+        this.clearDisplay = true
+      } else {
+        const equals = operation === "="
+      }
 
     },
     addDigit(n) {
+      if(n === "." && this.displayValue.includes(".")) {
+        return
+      }
 
+      const clearDisplay = this.displayValue === "0" || this.clearDisplay
+      const currentValue = clearDisplay ? "" : this.displayValue
+      const displayValue = currentValue + n
+
+      // O this faz referencia ao displayValue de data
+      this.displayValue = displayValue
+      this.clearDisplay = false
+
+      if (n !== ".") {
+        const i = this.current
+        const newValue = parseFloat(displayValue)
+        this.values[i] = newValue
+      }
     }
   }
 }
