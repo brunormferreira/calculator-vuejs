@@ -16,7 +16,7 @@ export default {
   background-color: #0004;
 
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   padding: 20px;
   font-size: 2.1em;
